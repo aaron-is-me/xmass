@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Selfie Camera - Merry Christmas</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+
+    /* Christmas Text Animation */
+    @keyframes text-flicker {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    
+    .flicker {
+      animation: text-flicker 1s infinite;
+    }
+
+    /* Sparkling Effect */
+    .sparkle::after {
+      content: '✨';
+      animation: sparkle-blink 1s infinite;
+      position: absolute;
+      right: -1rem;
+    }
+
+    @keyframes sparkle-blink {
+      0%, 100% { opacity: 0; }
+      50% { opacity: 1; }
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center h-screen bg-gradient-to-br from-blue-200 to-blue-400">
+
+  <div class="text-center space-y-6 px-4">
+    <!-- Christmas Message -->
+    <h1 class="text-5xl font-bold text-white mb-4 font-[Great+Vibes] flicker sparkle relative">
+      🎄 Merry Christmas, My Boy is Here!!! 💞
+    </h1>
+
+    <!-- Video Container -->
+    <div class="relative w-full max-w-md mx-auto mb-4">
+      <video id="camera" class="rounded-lg border-4 border-blue-400 shadow-lg w-full h-auto" autoplay playsinline></video>
+      <div class="absolute top-0 right-0 bg-white text-red-700 font-bold px-3 py-1 rounded-bl-md shadow-md">
+        🎅 🎁
+      </div>
+    </div>
+
+    <!-- Apology and Christmas Message -->
+    <p class="text-white text-lg max-w-md mx-auto leading-relaxed">
+      "🎄 Merry Christmas, my love. 💖 I know I upset you—I’m so sorry. Your happiness means everything to me. Let’s make this Christmas unforgettable together. I love you more than I can say. Thel Thel 💕"
+    </p>
+  </div>
+
+  <script>
+    const video = document.getElementById('camera');
+
+    // Function to start the selfie camera
+    async function startSelfieCamera() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: "user" } // Selfie camera only
+        });
+        video.srcObject = stream;
+      } catch (error) {
+        console.error("Error accessing the selfie camera:", error);
+        alert("Unable to access the selfie camera. Please check your camera permissions.");
+      }
+    }
+
+    // Check and request camera permissions
+    async function checkCameraPermissions() {
+      try {
+        // Try to get access to the camera
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: "user" }
+        });
+        
+        // Stop the stream immediately after accessing
+        stream.getTracks().forEach(track => track.stop());
+        
+        // Now, start the selfie camera
+        startSelfieCamera();
+      } catch (error) {
+        console.error("Camera permission denied or not supported.", error);
+        alert("Unable to access camera. Please allow permissions.");
+      }
+    }
+
+    // Run the permission check and start camera when the page is loaded
+    window.addEventListener('load', checkCameraPermissions);
+  </script>
+
+</body>
+</html>
